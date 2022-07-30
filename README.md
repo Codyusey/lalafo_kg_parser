@@ -1,7 +1,6 @@
 # lalafo_kg_parser 
-
-
-### Parser
+![logo](https://raw.githubusercontent.com/Codyusey/lalafo_kg_parser/f3704988705952ca29b42a2b77cb7cc95c458337/logo.svg)
+### *Parser*
 
 ## Description:
 
