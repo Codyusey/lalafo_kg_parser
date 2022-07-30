@@ -1,5 +1,5 @@
 # lalafo_kg_parser 
-![logo](https://raw.githubusercontent.com/Codyusey/lalafo_kg_parser/master/Logo.png)
+![<https://lalafo.kg/bishkek/kvartiry/prodazha-kvartir/>](https://raw.githubusercontent.com/Codyusey/lalafo_kg_parser/master/Logo.png)
 ### *Parser*
 
 ## Description:
