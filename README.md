@@ -31,6 +31,6 @@
 Run the program from the script folder:
 
 ```
-> cd rpscrape/scripts
-> python3 main.py
+> cd c:/lalafo_kg_parser
+> ".\venv\Scripts\python.exe" "main.py"
 ```
