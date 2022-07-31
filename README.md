@@ -8,7 +8,7 @@
 - One-thread parser
 - Requests library
 - Beautiful Soup
-- Target: https://lalafo.kg/bishkek/kvartiry/prodazha-kvartir/
+- JSON
 - Parsing speed approximately - 30 items/s.
 
 ## System requirements:
@@ -19,3 +19,18 @@
 ## Example table:
 
 ![Table](https://raw.githubusercontent.com/Codyusey/lalafo_kg_parser/master/Example.png)
+
+## Install
+
+```
+~$ git clone https://github.com/Codyusey/lalafo_kg_parser.git
+```
+
+## Usage
+
+Run the program from the script folder:
+
+```
+> cd rpscrape/scripts
+> python3 main.py
+```
