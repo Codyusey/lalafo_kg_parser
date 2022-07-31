@@ -37,7 +37,7 @@ items_dict = {}
 pagination = 0
 
 
-def get_pag_page(page):
+def get_pag_data(page):
     global pagination
     url = f'https://lalafo.kg/bishkek/kvartiry/prodazha-kvartir?sort_by=default&page={str(page)}'
     count = 0
@@ -64,9 +64,9 @@ def get_pag_page(page):
 def parser_json():
     """Scraping pages and save to xls file"""
     pre_id = 0
-    for page in tqdm(range(1, get_pag_page(0)[0] + 1), desc='Scraping pages', unit='page', ncols=MESS_LEN,
+    for page in tqdm(range(1, get_pag_data(0)[0] + 1), desc='Scraping pages', unit='page', ncols=MESS_LEN,
                      bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.GREEN, Fore.RESET)):
-        data_dict = get_pag_page(page)[1]
+        data_dict = get_pag_data(page)[1]
         for key in data_dict['props']['initialState']['listing']['listingFeed']['items']:
             items_lists = [''] * len(header_items)
             items_lists[1] = key['id']
