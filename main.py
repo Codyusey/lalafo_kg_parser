@@ -52,7 +52,7 @@ def get_pag_data(page):
                 data_str_like_json = soup.find('script', id="__NEXT_DATA__", type="application/json").text
                 data_dict = json.loads(data_str_like_json)
                 if page == 0:
-                    pagination = 2 #int(data_dict['props']['initialState']['listing']['listingFeed']["_meta"]['pageCount'])
+                    pagination = int(data_dict['props']['initialState']['listing']['listingFeed']["_meta"]['pageCount'])
                     return pagination
                 else:
                     return data_dict
