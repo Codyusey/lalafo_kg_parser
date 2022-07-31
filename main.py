@@ -1,5 +1,6 @@
 """
 One-thread parser  https://lalafo.kg/bishkek/kvartiry/prodazha-kvartir/
+Parsing speed approximately ~ 120 items/s.
 OS: Windows 10
 """
 
@@ -38,6 +39,7 @@ pagination = 0
 
 
 def get_pag_data(page):
+    """ Get pagination for start loop. Get data json"""
     global pagination
     url = f'https://lalafo.kg/bishkek/kvartiry/prodazha-kvartir?sort_by=default&page={str(page)}'
     count = 0
@@ -50,8 +52,10 @@ def get_pag_data(page):
                 data_str_like_json = soup.find('script', id="__NEXT_DATA__", type="application/json").text
                 data_dict = json.loads(data_str_like_json)
                 if page == 0:
-                    pagination = int(data_dict['props']['initialState']['listing']['listingFeed']["_meta"]['pageCount'])
-                return pagination, data_dict
+                    pagination = 2 #int(data_dict['props']['initialState']['listing']['listingFeed']["_meta"]['pageCount'])
+                    return pagination
+                else:
+                    return data_dict
             except Exception:
                 print_ln(f'Error get data {url}', tab_type='', start_ln='\r',  end_ln='', color=Fore.RED)
             if count == 2:
@@ -64,9 +68,9 @@ def get_pag_data(page):
 def parser_json():
     """Scraping pages and save to xls file"""
     pre_id = 0
-    for page in tqdm(range(1, get_pag_data(0)[0] + 1), desc='Scraping pages', unit='page', ncols=MESS_LEN,
+    for page in tqdm(range(1, get_pag_data(0) + 1), desc='Scraping pages', unit='page', ncols=MESS_LEN,
                      bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.GREEN, Fore.RESET)):
-        data_dict = get_pag_data(page)[1]
+        data_dict = get_pag_data(page)
         for key in data_dict['props']['initialState']['listing']['listingFeed']['items']:
             items_lists = [''] * len(header_items)
             items_lists[1] = key['id']
@@ -108,7 +112,8 @@ def parser_json():
 
     for num, key in enumerate(items_dict):
         items_dict[key][0] = num + 1
-    print_ln(f'Quantity of parsed items: {len(items_dict)}', start_ln='', tab_type='', color=Fore.GREEN)
+    print_ln(f'Quantity of parsed items: ', start_ln='', tab_type='', end_ln='', color=Fore.GREEN)
+    print_ln(f'{len(items_dict)}', start_ln='', tab_type='')  # color = Fore.WHITE
 
 
 def write_items_xlsx(name_xlsx, data_dict_, header_list_):

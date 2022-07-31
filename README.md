@@ -10,7 +10,8 @@
 - Requests library
 - Beautiful Soup
 - JSON
-- Parsing speed approximately - 30 items/s.
+- Openpyxl
+- Parsing speed approximately ~ 120 items/s.
 
 ## System requirements:
 
