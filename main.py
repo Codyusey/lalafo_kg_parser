@@ -9,6 +9,7 @@ import os
 import sys
 import time
 import datetime
+import pytz
 import colorama
 from colorama import Fore
 from random import randrange
@@ -32,7 +33,7 @@ headers = {'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,imag
 
 header_items = ["Number", "Advert id", "Advert url", "Main mobile phone", "Messenger phone_1",
                 "Messenger phone_2", "Messenger phone_3", "Messenger phone 4", "Advert title", "Price",
-                "Currency"]
+                "Currency", "Created time", "Updated_time"]
 MESS_LEN = 90
 items_dict = {}
 pagination = 0
@@ -106,6 +107,11 @@ def parser_json():
             except:
                 items_lists[9] = ''
                 items_lists[10] = ''
+            city_timezone = pytz.timezone("Asia/Bishkek")  # local_timezone = tzlocal.get_localzone()
+            items_lists[11] = datetime.datetime.fromtimestamp(
+                key['created_time'], city_timezone).strftime('%Y-%m-%d %H:%M')
+            items_lists[12] = datetime.datetime.fromtimestamp(
+                key['updated_time'], city_timezone).strftime('%Y-%m-%d %H:%M')
             if pre_id != key['id']:
                 pre_id = key['id']
             items_dict[key['id']] = items_lists
