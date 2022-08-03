@@ -137,6 +137,8 @@ def write_items_xlsx(name_xlsx, data_dict_, header_list_):
     work_cell.column_dimensions['I'].width = len(header_list_[8]) + 12
     work_cell.column_dimensions['J'].width = len(header_list_[9]) + 2
     work_cell.column_dimensions['K'].width = len(header_list_[10])
+    work_cell.column_dimensions['L'].width = len(header_list_[11]) + 4
+    work_cell.column_dimensions['M'].width = len(header_list_[12]) + 4
     work_cell.title = f'lalafo_kg_{len(data_dict_)}itm_{current_data}'
     if header_list_ != "":
         work_cell.append(header_list_)
