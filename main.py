@@ -4,22 +4,23 @@ Parsing speed approximately ~ 120 items/s.
 OS: Windows 10
 """
 
+import datetime
 import json
 import os
 import sys
 import time
-import datetime
-import pytz
-import colorama
-from colorama import Fore
 from random import randrange
+
+import colorama
+import cursor
+import pytz
+import requests
+from bs4 import BeautifulSoup
+from colorama import Fore
 from openpyxl import Workbook
 from openpyxl.styles import Font
-from bs4 import BeautifulSoup
-import requests
-from winsound import MessageBeep, MB_OK, MB_ICONHAND
 from tqdm import tqdm
-import cursor
+from winsound import MessageBeep, MB_OK, MB_ICONHAND
 
 colorama.init(autoreset=True)
 current_data_time = datetime.datetime.now().strftime("%d_%m_%Y_%H_%M")
@@ -29,7 +30,7 @@ abspath_workdir = os.path.dirname((os.path.abspath(__file__)))
 headers = {'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;'
                      '=0.8,application/signed-exchange;v=b3;q=0.9',
            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ('
-                         'KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'}
+                         'KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'}
 
 header_items = ["Number", "Advert id", "Advert url", "Main mobile phone", "Messenger phone_1",
                 "Messenger phone_2", "Messenger phone_3", "Messenger phone 4", "Advert title", "Price",
@@ -37,6 +38,26 @@ header_items = ["Number", "Advert id", "Advert url", "Main mobile phone", "Messe
 MESS_LEN = 90
 items_dict = {}
 pagination = 0
+filename_data_json = "loaded_source.json"
+
+
+def write_data_json(filename, data):
+    try:
+        with open(filename, 'w', encoding="utf-8") as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)
+    except Exception:
+        print(f'Error write - {filename}')
+
+
+def load_data_json(filename=filename_data_json):
+    try:
+        with open(filename, 'r', encoding="utf-8") as f:
+            data_json = json.load(f)
+            return data_json
+    except Exception:
+        print(f'Error read "{filename}"')
+        write_data_json(filename, {})  # clear cache
+        return {}
 
 
 def get_pag_data(page):
@@ -53,12 +74,12 @@ def get_pag_data(page):
                 data_str_like_json = soup.find('script', id="__NEXT_DATA__", type="application/json").text
                 data_dict = json.loads(data_str_like_json)
                 if page == 0:
-                    pagination = int(data_dict['props']['initialState']['listing']['listingFeed']["_meta"]['pageCount'])
+                    pagination = int(data_dict['props']['initialState']['listing']['listingFeed']['data']["_meta"]['pageCount'])
                     return pagination
                 else:
                     return data_dict
             except Exception:
-                print_ln(f'Error get data {url}', tab_type='', start_ln='\r',  end_ln='', color=Fore.RED)
+                print_ln(f'Error get data {url}', tab_type='', start_ln='\r', end_ln='', color=Fore.RED)
             if count == 2:
                 print_ln("Error has occurred. Please restart the script.", color=Fore.RED)
                 beep(b_type=MB_ICONHAND)
@@ -72,7 +93,7 @@ def parser_json():
     for page in tqdm(range(1, get_pag_data(0) + 1), desc='Scraping pages', unit='page', ncols=MESS_LEN,
                      bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.GREEN, Fore.RESET)):
         data_dict = get_pag_data(page)
-        for key in data_dict['props']['initialState']['listing']['listingFeed']['items']:
+        for key in data_dict['props']['initialState']['listing']['listingFeed']['data']['items']:
             items_lists = [''] * len(header_items)
             items_lists[1] = key['id']
             items_lists[2] = 'https://lalafo.kg' + key['url']
